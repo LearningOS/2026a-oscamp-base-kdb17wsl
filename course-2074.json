@@ -2,8 +2,8 @@
   "schema": 1,
   "courseId": 2074,
   "repository": "LearningOS/2026a-oscamp-base-kdb17wsl",
-  "commit": "523fd7fe088a56b18ee9db71442cb9ef477fdca5",
-  "score": 19,
+  "commit": "04396caf4f600cfc03288ca54e5e116d35fbe4ae",
+  "score": 24,
   "totalScore": 100,
   "exercises": [
     {
@@ -44,9 +44,9 @@
     {
       "name": "bump_allocator",
       "max": 5,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 5,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "free_list_allocator",
@@ -176,9 +176,9 @@
     }
   ],
   "student": "kdb17wsl",
-  "runId": "37954199842",
+  "runId": "37955391345",
   "runAttempt": "1",
   "upload": {
-    "status": "accepted"
+    "status": "pending"
   }
 }
