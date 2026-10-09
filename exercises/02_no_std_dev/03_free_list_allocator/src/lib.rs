@@ -115,11 +115,38 @@ unsafe impl GlobalAlloc for FreeListAllocator {
         // - Check if curr address satisfies align, and (*curr).size >= size
         // - If found, remove it from the list (update prev's next or the free_list head)
         // - Return curr as *mut u8
+        let mut prev_ptr: *mut FreeBlock = null_mut();
+        let mut curr = self.free_list_head();
+        while !curr.is_null() {
+            if curr as usize % align == 0 && (*curr).size >= size {
+                let next = (*curr).next;
+                if prev_ptr.is_null() {
+                    self.set_free_list_head(next);
+                } else {
+                    (*prev_ptr).next = next;
+                }
+                return curr as *mut u8;
+            }
+        }
 
         // TODO: Step 2 — no suitable block in free_list, allocate from bump region
         //
         // Same logic as 02_bump_allocator's alloc
-        todo!()
+        let mut curr = self.bump_next.load(core::sync::atomic::Ordering::SeqCst); 
+        loop {
+            let aligned = (curr + align - 1) & !(align - 1);
+            let end = match aligned.checked_add(size) {
+                Some(end) => end,
+                None => return null_mut(),
+            };
+            if end > self.heap_end {
+                return null_mut();
+            }
+            match self.bump_next.compare_exchange(curr, end, core::sync::atomic::Ordering::SeqCst, core::sync::atomic::Ordering::SeqCst) {
+                Ok(_) => return aligned as *mut u8,
+                Err(actual) => curr = actual,
+            }
+        }
     }
 
     unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
@@ -131,7 +158,10 @@ unsafe impl GlobalAlloc for FreeListAllocator {
         // 1. Cast ptr to *mut FreeBlock
         // 2. Write FreeBlock { size, next: current list head }
         // 3. Update free_list head to ptr
-        todo!()
+        let free_block = ptr as *mut FreeBlock;
+        (*free_block).size = size;
+        (*free_block).next = self.free_list_head();
+        self.set_free_list_head(free_block);
     }
 }
 
