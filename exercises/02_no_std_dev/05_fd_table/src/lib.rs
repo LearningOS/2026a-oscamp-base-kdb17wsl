@@ -38,7 +38,7 @@
 //! - fd number reuse strategy (find smallest free slot)
 //! - `Arc` reference counting and resource release
 
-use std::sync::Arc;
+use std::sync::{Arc, atomic::AtomicUsize};
 
 /// File abstraction trait — all "files" in the kernel (regular files, pipes, sockets) implement this
 pub trait File: Send + Sync {
@@ -51,13 +51,18 @@ pub struct FdTable {
     // TODO: Design the internal structure
     // Hint: use Vec<Option<Arc<dyn File>>>
     //       the index is the fd number, None means the fd is closed or unallocated
+    table: Vec<Option<Arc<dyn File>>>,
+    count: AtomicUsize,
 }
 
 impl FdTable {
     /// Create an empty fd table
     pub fn new() -> Self {
         // TODO
-        todo!()
+        Self {
+            table: Vec::new(),
+            count: AtomicUsize::new(0),
+        }
     }
 
     /// Allocate a new fd, return the fd number.
@@ -65,25 +70,42 @@ impl FdTable {
     /// Prefers reusing the smallest closed fd number; if no free slot, appends to the end.
     pub fn alloc(&mut self, file: Arc<dyn File>) -> usize {
         // TODO
-        todo!()
+        for (i, slot) in self.table.iter_mut().enumerate() {
+            if slot.is_none() {
+                *slot = Some(file);
+                self.count.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                return i;
+            }
+        }
+        self.table.push(Some(file));
+        self.count.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+        self.table.len() - 1
     }
 
     /// Get the file object for an fd. Returns None if the fd doesn't exist or is closed.
     pub fn get(&self, fd: usize) -> Option<Arc<dyn File>> {
         // TODO
-        todo!()
+        if fd >= self.table.len() {
+            return None;
+        }
+        self.table[fd].clone()
     }
 
     /// Close an fd. Returns true on success, false if the fd doesn't exist or is already closed.
     pub fn close(&mut self, fd: usize) -> bool {
         // TODO
-        todo!()
+        if fd >= self.table.len() || self.table[fd].is_none() {
+            return false;
+        }
+        self.table[fd] = None;
+        self.count.fetch_sub(1, std::sync::atomic::Ordering::Relaxed);
+        true 
     }
 
     /// Return the number of currently allocated fds (excluding closed ones)
     pub fn count(&self) -> usize {
         // TODO
-        todo!()
+        self.count.load(std::sync::atomic::Ordering::Relaxed)
     }
 }
 
