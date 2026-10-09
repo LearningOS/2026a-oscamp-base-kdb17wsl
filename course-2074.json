@@ -2,8 +2,8 @@
   "schema": 1,
   "courseId": 2074,
   "repository": "LearningOS/2026a-oscamp-base-kdb17wsl",
-  "commit": "a161baa2b823a1cbfe0d1cb6609cae5147013293",
-  "score": 15,
+  "commit": "523fd7fe088a56b18ee9db71442cb9ef477fdca5",
+  "score": 19,
   "totalScore": 100,
   "exercises": [
     {
@@ -37,9 +37,9 @@
     {
       "name": "mem_primitives",
       "max": 4,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 4,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "bump_allocator",
@@ -176,9 +176,9 @@
     }
   ],
   "student": "kdb17wsl",
-  "runId": "37254058449",
+  "runId": "37954199842",
   "runAttempt": "1",
   "upload": {
-    "status": "accepted"
+    "status": "pending"
   }
 }
