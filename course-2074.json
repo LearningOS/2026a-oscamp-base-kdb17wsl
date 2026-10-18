@@ -2,8 +2,8 @@
   "schema": 1,
   "courseId": 2074,
   "repository": "LearningOS/2026a-oscamp-base-kdb17wsl",
-  "commit": "d1c46b5c9d700155f4513016276232816905d5b1",
-  "score": 72,
+  "commit": "151d2487bed65a1f0da59dbd84a31b027f927092",
+  "score": 86,
   "totalScore": 100,
   "exercises": [
     {
@@ -121,30 +121,30 @@
     {
       "name": "basic_future",
       "max": 4,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 4,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "tokio_tasks",
       "max": 3,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 3,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "async_channel_ex",
       "max": 3,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 3,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "select_timeout",
       "max": 4,
-      "score": 0,
-      "status": "fail",
-      "exitCode": 101
+      "score": 4,
+      "status": "pass",
+      "exitCode": 0
     },
     {
       "name": "pte_flags",
@@ -176,9 +176,9 @@
     }
   ],
   "student": "kdb17wsl",
-  "runId": "39113678265",
+  "runId": "39114874373",
   "runAttempt": "1",
   "upload": {
-    "status": "accepted"
+    "status": "pending"
   }
 }
